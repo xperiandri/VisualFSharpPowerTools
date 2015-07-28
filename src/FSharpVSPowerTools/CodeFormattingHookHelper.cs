@@ -29,7 +29,7 @@ namespace FSharpVSPowerTools
 
         [ImportingConstructor]
         public CodeFormattingHookHelper(
-            IVsEditorAdaptersFactoryService adaptersFactory, 
+            IVsEditorAdaptersFactoryService adaptersFactory,
             IEditorOptionsFactoryService editorOptionsFactory,
             IEditorOperationsFactoryService editorOperationsFactoryService,
             ITextBufferUndoManagerProvider textBufferUndoManagerProvider,
@@ -64,7 +64,7 @@ namespace FSharpVSPowerTools
 
         private CodeFormattingServices GetServices()
         {
-            return new CodeFormattingServices(_editorOptionsFactory, _editorOperationsFactoryService, 
+            return new CodeFormattingServices(_editorOptionsFactory, _editorOperationsFactoryService,
                             _textBufferUndoManagerProvider, _textDocumentFactoryService, _serviceProvider);
         }
     }

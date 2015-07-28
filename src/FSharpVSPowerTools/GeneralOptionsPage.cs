@@ -3,7 +3,6 @@ using System;
 using System.ComponentModel;
 using System.Configuration;
 using System.Runtime.InteropServices;
-using System.Security.Principal;
 using System.Windows.Forms;
 using Microsoft.VisualStudio.ComponentModelHost;
 
@@ -63,43 +62,17 @@ namespace FSharpVSPowerTools
             }
         }
 
-        private bool IsUserAdministrator()
-        {
-            bool isAdmin;
-            try
-            {
-                // Get the currently logged in user
-                WindowsIdentity user = WindowsIdentity.GetCurrent();
-                WindowsPrincipal principal = new WindowsPrincipal(user);
-                isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
-            }
-            catch (UnauthorizedAccessException)
-            {
-                isAdmin = false;
-            }
-
-            return isAdmin;
-        }
-
         // Return true if navigation bar config is set successfully
         private bool SetNavigationBarConfig(bool v)
         {
             try
             {
-                if (IsUserAdministrator())
-                {
-                    var config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-                    config.AppSettings.Settings.Remove(navBarConfig);
-                    config.AppSettings.Settings.Add(navBarConfig, v.ToString().ToLower());
-                    config.Save(ConfigurationSaveMode.Minimal);
+                var config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                config.AppSettings.Settings.Remove(navBarConfig);
+                config.AppSettings.Settings.Add(navBarConfig, v.ToString().ToLower());
+                config.Save(ConfigurationSaveMode.Minimal);
 
-                    return true;
-                }
-                else
-                {
-                    logger.MessageBox(LogType.Error, Resource.navBarUnauthorizedMessage);
-                    return false;
-                }
+                return true;
             }
             catch (Exception ex)
             {

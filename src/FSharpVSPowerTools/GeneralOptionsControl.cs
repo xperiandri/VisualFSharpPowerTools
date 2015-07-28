@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Principal;
 using System.Windows.Forms;
 
 namespace FSharpVSPowerTools
@@ -11,7 +12,28 @@ namespace FSharpVSPowerTools
             InitializeComponent();
 
             _optionsPage = optionsPage;
+
+            chbNavBar.Enabled = CheckUserIsAdministrator();
         }
+
+        private bool CheckUserIsAdministrator()
+        {
+            bool isAdmin;
+            try
+            {
+                // Get the currently logged in user
+                WindowsIdentity user = WindowsIdentity.GetCurrent();
+                WindowsPrincipal principal = new WindowsPrincipal(user);
+                isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                isAdmin = false;
+            }
+
+            return isAdmin;
+        }
+
         public bool XmlDocEnabled
         {
             get { return chbXmlDoc.Checked; }
